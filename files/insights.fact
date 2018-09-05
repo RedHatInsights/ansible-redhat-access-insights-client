@@ -14,8 +14,8 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 #
-if [ -e /etc/redhat-access-insights/machine-id ]; then
-    SYSTEM_ID=$(cat /etc/redhat-access-insights/machine-id)
+if [ -e /etc/insights-client/machine-id ]; then
+    SYSTEM_ID=$(cat /etc/insights-client/machine-id)
 fi
 if [ -n "${SYSTEM_ID}" ]; then
     echo "{ \"machine_id\" : \"${SYSTEM_ID}\", \"system_id\" : \"${SYSTEM_ID}\" }"

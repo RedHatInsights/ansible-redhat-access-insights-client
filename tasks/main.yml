@@ -14,24 +14,24 @@
 #     See the License for the specific language governing permissions and
 #     limitations under the License.
 #
-- name: Install Red Hat Access Insights Client
-  yum: name=redhat-access-insights state=present
+- name: Install Red Hat Insights Client
+  yum: name=insights-client state=present
   become: yes
 
-- name: Configure username in redhat-access-insights.conf
+- name: Configure username in insights-client.conf
   ini_file:
-    path: /etc/redhat-access-insights/redhat-access-insights.conf
-    section: redhat-access-insights
+    path: /etc/insights-client/insights-client.conf 
+    section: insights-client
     option: username
     value: "{{ redhat_portal_username }}"
     no_extra_spaces: yes
     state: "{{ 'present' if redhat_portal_username else 'absent' }}"
   when: redhat_portal_username is defined
 
-- name: Configure password in redhat-access-insights.conf
+- name: Configure password in insights-client.conf
   ini_file:
-    path: /etc/redhat-access-insights/redhat-access-insights.conf
-    section: redhat-access-insights
+    path: /etc/insights-client/insights-client.conf
+    section: insights-client
     option: password
     value: "{{ redhat_portal_password }}"
     no_extra_spaces: true
@@ -39,25 +39,25 @@
   when: redhat_portal_username is defined
 
 - name: Check status of Insights .register file
-  stat: path=/etc/redhat-access-insights/.registered
+  stat: path=/etc/insights-client/.registered
   become: yes
   register: reg_file_task
 
 - name: Unregister if we are setting the display_name, and we have already registered
-  command: redhat-access-insights --unregister
+  command: insights-client --unregister
   when:
     - insights_display_name is defined
     - reg_file_task.stat.exists == true
   become: yes
 
-- name: Register to the Red Hat Access Insights Service
-  command: redhat-access-insights --register {{ '--display-name='+insights_display_name if insights_display_name is defined else '' }}
+- name: Register to the Red Hat Insights Service
+  command: insights-client --register {{ '--display-name='+insights_display_name if insights_display_name is defined else '' }}
   ignore_errors: yes
   become: yes
   # Always run --register (see next comment for why)
 
 - name: Register to Insights again if necessary
-  command: redhat-access-insights --register {{ '--display-name='+insights_display_name if insights_display_name is defined else '' }} creates=/etc/redhat-access-insights/.registered
+  command: insights-client --register {{ '--display-name='+insights_display_name if insights_display_name is defined else '' }} creates=/etc/insights-client/.registered
   become: yes
   # Only run --register again if there is no .register file at this point
   #   This is to handle the case where the system was unregistered on the server, but this
@@ -65,13 +65,13 @@
 
 - name: Change permissions of Insights Config directory so that Insights System ID can be read
   file:
-    path: /etc/redhat-access-insights
+    path: /etc/insights-client
     mode: og=rx
   become: yes
 
 - name: Change permissions of machine_id file so that Insights System ID can be read
   file:
-    path: /etc/redhat-access-insights/machine-id
+    path: /etc/insights-client/machine-id
     mode: og=r
   become: yes
 
