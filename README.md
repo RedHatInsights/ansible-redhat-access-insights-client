@@ -81,14 +81,14 @@ Example Playbook
 
     - hosts: all
       roles:
-      - { role: RedHatInsights.insights-client, when: ansible_os_family == 'RedHat' }
+      - { role: redhatinsights.insights-client, when: ansible_os_family == 'RedHat' }
 
 If a system's hostname is not easily identifiable, but inventory_hostname is easily identifiable,
 as often happens on some cloud platforms, set insights_display_name set to be inventory_hostname:
 
     - hosts: all
       roles:
-      - role: RedHatInsights.insights-client
+      - role: redhatinsights.insights-client
         insights_display_name: "{{ inventory_hostname }}"
         when: ansible_os_family == 'RedHat'
 
@@ -119,7 +119,7 @@ Example Use
 1. On a system where [Ansible is installed](http://docs.ansible.com/ansible/intro_installation.html), run the following command:
 
     ```bash
-    $ ansible-galaxy install RedHatInsights.insights-client
+    $ ansible-galaxy install redhatinsights.insights-client
     ```
 
 1. Copy the Example Playbook to a file named 'install-insights.yml'.
