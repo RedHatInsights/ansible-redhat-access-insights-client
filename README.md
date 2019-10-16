@@ -113,9 +113,9 @@ usernames or passwords):
     - hosts: all
       roles:
       - role: RedHatInsights.insights-client
-          vars:
-            insights_display_name: 'example_system'
-            ansible_python_interpreter: '/usr/libexec/platform-python'
+        vars:
+          insights_display_name: 'example_system'
+          ansible_python_interpreter: '/usr/libexec/platform-python'
         when: ansible_os_family == 'RedHat'
 
 Example Configuration File
