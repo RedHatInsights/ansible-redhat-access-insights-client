@@ -134,7 +134,7 @@ using the provided username/password and display_name:
 redhat_portal_username: example_user
 redhat_portal_password: example_password
 insights_display_name: example_system
-autoconfig: False
+auto_config: False
 authmethod: BASIC
 ```
 
