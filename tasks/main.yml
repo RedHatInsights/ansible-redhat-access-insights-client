@@ -28,6 +28,7 @@
     display_name: "{{ insights_display_name | default(omit) }}"
     proxy: "{{ insights_proxy | default(omit) }}"
   become: true
+  no_log: true
 
 - name: Register Insights Client
   insights_register:
