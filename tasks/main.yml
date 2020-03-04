@@ -33,7 +33,7 @@
   insights_register:
     state: present
   become: true
-  
+
 - name: Change permissions of Insights Config directory so that Insights System ID can be read
   file:
     path: /etc/insights-client
@@ -59,3 +59,9 @@
     dest: /etc/ansible/facts.d
     mode: a+x
   become: true
+
+- name: Run insights client
+  insights_run:
+  become: true
+  when: insights_run_agent is defined and insights_run_agent
+

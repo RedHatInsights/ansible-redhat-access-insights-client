@@ -8,25 +8,25 @@ Requirements
 
 **Note on managing RHEL 8 systems:**
 
-RHEL 8 changed the default path for the python interpreter so this role will need to know the new path. 
-Ansible version 2.8+ can determine the correct path automatically, but if you are using Ansible version 2.7 
-or lower the path will need to be supplied to the role. This can be done by configuring the `ansible_python_interpreter` 
+RHEL 8 changed the default path for the python interpreter so this role will need to know the new path.
+Ansible version 2.8+ can determine the correct path automatically, but if you are using Ansible version 2.7
+or lower the path will need to be supplied to the role. This can be done by configuring the `ansible_python_interpreter`
 parameter via the configuration file (shown in the examples further down), playbook invocation, inventory, etc.
 
 RHEL 8 platform-python path: **/usr/libexec/platform-python**
 
-This is only required when managing RHEL 8 systems with Ansible version 2.7 or lower. 
+This is only required when managing RHEL 8 systems with Ansible version 2.7 or lower.
 
 **Note on managing RHEL 6 SELinux systems:**
 
-Almost all uses of Ansible that target SELinux machines require that the python module 'selinux' is installed. On RHEL that module is provided by the rpm 'python-selinux'. This rpm will need to be installed prior to using this role on RHEL 6 (it is already included in RHEL 7). 
+Almost all uses of Ansible that target SELinux machines require that the python module 'selinux' is installed. On RHEL that module is provided by the rpm 'python-selinux'. This rpm will need to be installed prior to using this role on RHEL 6 (it is already included in RHEL 7).
 
 Role Variables / Configuration
 --------------
 
-The following variables can be used to perform some initial configuration for the insights-client install. 
+The following variables can be used to perform some initial configuration for the insights-client install.
 These variables can be passed in directly with the playbook invocation or placed in a configuration yaml file.
-See the section 'Example Playbook' for information on various ways to use these variables. 
+See the section 'Example Playbook' for information on various ways to use these variables.
 
 * insights_display_name: (optional)
 
@@ -45,7 +45,7 @@ See the section 'Example Playbook' for information on various ways to use these 
 
 * redhat_portal_username: (optional)
 * redhat_portal_password: (optional)
-    
+
     If defined, these set, change, or remove the username and password in the Insights configuration.
     If undefined, this role will make no changes to the Insights configuration.
 
@@ -63,25 +63,30 @@ See the section 'Example Playbook' for information on various ways to use these 
     CERT provided by RHSM.
 
 * auto_config: (optional)
-    
+
     True/False - attempt to auto-configure the network connection with Satellite or RHSM. Default behavior is True.
 
 * authmethod: (optional)
-    
+
     BASIC/CERT - This parameter is used to set the authentication method for the Portal. Default bahavior is BASIC.
     Note: when 'auto_config' is enabled (set to True), CERT will be used if RHSM or Satellite is detected.
 
 * insights_proxy: (optional)
 
     If the insights client is behind a proxy or firewall, a proxy can be specified. Default is unspecified.
-		Ex: http://user:pass@192.168.100.50:8080 
+		Ex: http://user:pass@192.168.100.50:8080
 
 * ansible_python_interpreter: (see Requirements above to determine if this is needed)
 
-    This variable allows you to provide the python interpreter path for ansible to use. This is needed when 
+    This variable allows you to provide the python interpreter path for ansible to use. This is needed when
     managing RHEL 8 with older versions of Ansible (2.7 and lower).
 
     RHEL 8 platform-python path: **/usr/libexec/platform-python**
+
+* insights_run_agent: (optional)
+
+    If defined and equals True, it'll run the insights agent as a last step to upload an initial insights report.
+    Otherwise (not defined or equals False), nothing will be executed.
 
 Facts Installed
 ---------------
@@ -112,7 +117,7 @@ In the examples directory is a very basic playbook utilizing this role:
       roles:
       - { role: RedHatInsights.insights-client, when: ansible_os_family == 'RedHat' }
 
-Here is an example with additional configuration (though using a separate file is preferred if including 
+Here is an example with additional configuration (though using a separate file is preferred if including
 usernames or passwords):
 
     - hosts: all
@@ -121,19 +126,21 @@ usernames or passwords):
           vars:
             insights_display_name: 'example_system'
             ansible_python_interpreter: '/usr/libexec/platform-python'
+            insights_run_agent: True
         when: ansible_os_family == 'RedHat'
 
 Example Configuration File
 ----------------
 
-The insights-client install can be configured by using a configuration yaml file to modify various parameters. 
-Here's an example, insights-client-config.yml, that configures the insights-client to register via basic auth 
+The insights-client install can be configured by using a configuration yaml file to modify various parameters.
+Here's an example, insights-client-config.yml, that configures the insights-client to register via basic auth
 using the provided username/password and display_name:
 
 ```yaml
 redhat_portal_username: example_user
 redhat_portal_password: example_password
 insights_display_name: example_system
+insights_run_agent: True
 autoconfig: False
 authmethod: BASIC
 ```
@@ -161,7 +168,7 @@ Example Use
     $ ansible-galaxy install RedHatInsights.insights-client
     ```
 
-    This will install the latest version of the role to ansible's default role directory (if using a non default role directory 
+    This will install the latest version of the role to ansible's default role directory (if using a non default role directory
     update the playbook accordingly)
 
 1. Copy the Example Playbook to a file named 'install-insights.yml'.
