@@ -27,6 +27,8 @@
     authmethod: "{{ authmethod | default(omit) }}"
     display_name: "{{ insights_display_name | default(omit) }}"
     proxy: "{{ insights_proxy | default(omit) }}"
+    obfuscate: "{{ insights_obfuscate | default(omit) }}"
+    obfuscate_hostname: "{{ insights_obfuscate_hostname | default(omit) }}"    
   become: true
 
 - name: Register Insights Client
