@@ -18,7 +18,9 @@ class ActionModule(ActionBase):
             auto_config = self._task.args.get('auto_config', None),
             authmethod = self._task.args.get('authmethod', None),
             display_name = self._task.args.get('display_name', None),
-            proxy = self._task.args.get('proxy', None)
+            proxy = self._task.args.get('proxy', None),
+            obfuscate = str(self._task.args.get('obfuscate', None)),
+            obfuscate_hostname = str(self._task.args.get('obfuscate_hostname', None))
         )
 
         for k, v in config_vars.items():
